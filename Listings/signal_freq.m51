@@ -1,0 +1,153 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        04/21/2017  14:30:56  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\main_f.obj TO .\Objects\signal_freq PRINT (.\Listings\signal_freq.m51) RAMSIZE (25
+>> 6)
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main_f.obj (MAIN_F)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPADD)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPMUL)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPNEG)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?CASTF)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?LNEG)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\signal_freq (MAIN_F)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0008H     UNIT         ?DT?MAIN_F
+                    0010H     0010H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         ?BI?MAIN_F
+                    0020H.1   0000H.7                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+                    000EH     07F2H                  *** GAP ***
+            CODE    0800H     029EH     UNIT         ?C?LIB_CODE
+            CODE    0A9EH     010DH     UNIT         ?PR?MAIN?MAIN_F
+            CODE    0BABH     008CH     UNIT         ?C_C51STARTUP
+            CODE    0C37H     0017H     UNIT         ?PR?INTERUPT?MAIN_F
+            CODE    0C4EH     0009H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\signal_freq (MAIN_F)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN_F
+  +--> ?C_INITSEG
+
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      04/21/2017  14:30:56  PAGE 2
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\signal_freq (MAIN_F)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN_F
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  B:00A8H.7       PUBLIC        EA
+  D:0008H         PUBLIC        lh_low
+  D:0009H         PUBLIC        ll_low
+  B:0020H.0       PUBLIC        edge
+  C:0A9EH         PUBLIC        main
+  B:00A0H.0       PUBLIC        output
+  D:0089H         PUBLIC        TMOD
+  D:000AH         PUBLIC        duty
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  D:000EH         PUBLIC        lh_high
+  D:000FH         PUBLIC        ll_high
+  C:0C37H         PUBLIC        Interupt
+  -------         PROC          INTERUPT
+  C:0C37H         LINE#         26
+  C:0C37H         LINE#         28
+  C:0C39H         LINE#         29
+  C:0C3CH         LINE#         30
+  C:0C3CH         LINE#         31
+  C:0C3FH         LINE#         32
+  C:0C42H         LINE#         33
+  C:0C44H         LINE#         34
+  C:0C45H         LINE#         35
+  C:0C45H         LINE#         36
+  C:0C47H         LINE#         37
+  C:0C4AH         LINE#         38
+  C:0C4DH         LINE#         39
+  C:0C4DH         LINE#         42
+  -------         ENDPROC       INTERUPT
+  -------         PROC          MAIN
+  C:0A9EH         LINE#         44
+  C:0A9EH         LINE#         45
+  C:0A9EH         LINE#         48
+  C:0AA0H         LINE#         49
+  C:0AA3H         LINE#         53
+  C:0ACFH         LINE#         54
+  C:0AFBH         LINE#         56
+  C:0B24H         LINE#         57
+  C:0B4DH         LINE#         59
+  C:0B79H         LINE#         60
+  C:0BA5H         LINE#         63
+  C:0BA7H         LINE#         64
+  C:0BA9H         LINE#         66
+  C:0BA9H         LINE#         67
+  C:0BA9H         LINE#         69
+  -------         ENDPROC       MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      04/21/2017  14:30:56  PAGE 3
+
+
+  -------         ENDMOD        MAIN_F
+
+  -------         MODULE        ?C?FPADD
+  C:0807H         PUBLIC        ?C?FPADD
+  C:0803H         PUBLIC        ?C?FPSUB
+  -------         ENDMOD        ?C?FPADD
+
+  -------         MODULE        ?C?FPMUL
+  C:08F8H         PUBLIC        ?C?FPMUL
+  -------         ENDMOD        ?C?FPMUL
+
+  -------         MODULE        ?C?FPNEG
+  C:09FEH         PUBLIC        ?C?FPNEG
+  -------         ENDMOD        ?C?FPNEG
+
+  -------         MODULE        ?C?CASTF
+  C:0A0FH         PUBLIC        ?C?CASTF
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        ?C?LNEG
+  C:0A90H         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 012FH BYTE (14%) *
+******************************************************************************
+
+Program Size: data=17.1 xdata=0 code=1117
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

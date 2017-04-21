@@ -1,0 +1,96 @@
+C51 COMPILER V9.56.0.0   MAIN_F                                                            04/21/2017 14:30:56 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN_F
+OBJECT MODULE PLACED IN .\Objects\main_f.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main_f.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\ma
+                    -in_f.lst) TABS(2) OBJECT(.\Objects\main_f.obj)
+
+line level    source
+
+   1          /*
+   2          500 HZ signal generator with a variable duty cycle
+   3          based on the user's input on port 2 as a packed BCD
+   4          an error is raised in case of wrong duty cycle
+   5          Timer 0 is used to genrate signal
+   6          
+   7          Written by:
+   8            Marwan Nabil 2767
+   9            Mohammed Nasser 2858
+  10          */
+  11          
+  12          #include <at89c51xd2.h>
+  13          #include <stdlib.h>
+  14          
+  15          
+  16          sbit output = P2^0;
+  17          sbit err = P2^6;
+  18          
+  19          //sbit edge = 1 //start from high output
+  20          //int total_sig_time = 0xe66;
+  21          
+  22          bit edge = 0;
+  23          float duty = 0.75;
+  24          char lh_high, ll_high, lh_low, ll_low;
+  25          
+  26          void Interupt(void) interrupt 1
+  27          {
+  28   1        output = ~ output;
+  29   1        if(edge)
+  30   1        {
+  31   2          TH0 = lh_high;
+  32   2          TL0 = ll_high;
+  33   2          edge = !edge;
+  34   2        }
+  35   1        else{
+  36   2          edge = !edge;
+  37   2          TH0 = lh_low;
+  38   2          TL0 = ll_low;
+  39   2        }
+  40   1        //edge= ~edge;
+  41   1        
+  42   1      }
+  43          
+  44          void main()
+  45          { 
+  46   1        
+  47   1        // gen a square wave with 50% duty cycle 
+  48   1        EA = 1;
+  49   1        TMOD = 0x01;
+  50   1        
+  51   1        
+  52   1        
+  53   1        TH0 = 0xFF - 0x0e * (1-duty);
+  54   1        TL0 = 0xFF - 0x66 * (1-duty);
+C51 COMPILER V9.56.0.0   MAIN_F                                                            04/21/2017 14:30:56 PAGE 2   
+
+  55   1        
+  56   1        lh_high= 0xFF - (0x0e * (duty));
+  57   1        ll_high= 0xFF - (0x66 * (duty)) + 1;
+  58   1        
+  59   1        lh_low = 0xFF - (0x0e * (1-duty));
+  60   1        ll_low = 0xFF - (0x66 * (1-duty)) + 1;
+  61   1        
+  62   1        
+  63   1        TR0 = 1;
+  64   1        ET0 =1 ;
+  65   1        
+  66   1        while(1)
+  67   1        {
+  68   2          
+  69   2        }
+  70   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    292    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

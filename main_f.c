@@ -20,18 +20,20 @@ sbit err = P2^6;
 //int total_sig_time = 0xe66;
 
 bit edge = 0;
-float duty = 0.5;
+float duty = 0.75;
 char lh_high, ll_high, lh_low, ll_low;
 
 void Interupt(void) interrupt 1
 {
 	output = ~ output;
-	if(!edge)
+	if(edge)
 	{
 		TH0 = lh_high;
 		TL0 = ll_high;
+		edge = !edge;
 	}
 	else{
+		edge = !edge;
 		TH0 = lh_low;
 		TL0 = ll_low;
 	}

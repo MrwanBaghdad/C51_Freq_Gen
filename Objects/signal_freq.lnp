@@ -1,0 +1,3 @@
+".\Objects\main_f.obj" 
+TO ".\Objects\signal_freq" 
+PRINT(".\Listings\signal_freq.m51") RAMSIZE(256) 
