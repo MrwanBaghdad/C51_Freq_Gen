@@ -1,9 +1,9 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        04/21/2017  14:30:56  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        04/25/2017  07:38:51  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
 C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\main_f.obj TO .\Objects\signal_freq PRINT (.\Listings\signal_freq.m51) RAMSIZE (25
->> 6)
+>> 6) CODE (0X0000-0XFFFF)
 
 
 MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
@@ -13,10 +13,13 @@ INPUT MODULES INCLUDED:
   .\Objects\main_f.obj (MAIN_F)
   C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPADD)
   C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPMUL)
-  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPNEG)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPDIV)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FCAST)
   C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?CASTF)
   C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
   C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?SCDIV)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?IMUL)
   C:\KEIL_V5\C51\LIB\C51S.LIB (?C?LNEG)
   C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
 
@@ -29,8 +32,8 @@ LINK MAP OF MODULE:  .\Objects\signal_freq (MAIN_F)
 
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
-            DATA    0008H     0008H     UNIT         ?DT?MAIN_F
-                    0010H     0010H                  *** GAP ***
+            DATA    0008H     0014H     UNIT         ?DT?MAIN_F
+                    001CH     0004H                  *** GAP ***
             BIT     0020H.0   0000H.1   UNIT         ?BI?MAIN_F
                     0020H.1   0000H.7                *** GAP ***
             IDATA   0021H     0001H     UNIT         ?STACK
@@ -40,11 +43,12 @@ LINK MAP OF MODULE:  .\Objects\signal_freq (MAIN_F)
                     0003H     0008H                  *** GAP ***
             CODE    000BH     0003H     ABSOLUTE     
                     000EH     07F2H                  *** GAP ***
-            CODE    0800H     029EH     UNIT         ?C?LIB_CODE
-            CODE    0A9EH     010DH     UNIT         ?PR?MAIN?MAIN_F
-            CODE    0BABH     008CH     UNIT         ?C_C51STARTUP
-            CODE    0C37H     0017H     UNIT         ?PR?INTERUPT?MAIN_F
-            CODE    0C4EH     0009H     UNIT         ?C_INITSEG
+            CODE    0800H     039FH     UNIT         ?C?LIB_CODE
+            CODE    0B9FH     0118H     UNIT         ?PR?GET_INPUT?MAIN_F
+            CODE    0CB7H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0D43H     0082H     UNIT         ?PR?MAIN?MAIN_F
+            CODE    0DC5H     0017H     UNIT         ?PR?INTERUPT?MAIN_F
+            CODE    0DDCH     000FH     UNIT         ?C_INITSEG
 
 
 
@@ -55,11 +59,14 @@ SEGMENT
   +--> CALLED SEGMENT
 ---------------------
 ?C_C51STARTUP
+BL51 BANKED LINKER/LOCATER V6.22                                                      04/25/2017  07:38:51  PAGE 2
+
+
   +--> ?PR?MAIN?MAIN_F
   +--> ?C_INITSEG
 
-
-BL51 BANKED LINKER/LOCATER V6.22                                                      04/21/2017  14:30:56  PAGE 2
+?PR?MAIN?MAIN_F
+  +--> ?PR?GET_INPUT?MAIN_F
 
 
 
@@ -70,58 +77,116 @@ SYMBOL TABLE OF MODULE:  .\Objects\signal_freq (MAIN_F)
 
   -------         MODULE        MAIN_F
   C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0008H         PUBLIC        temp_h
+  D:0090H         PUBLIC        P1
   D:00A0H         PUBLIC        P2
+  D:0009H         PUBLIC        temp_l
   B:00A8H.7       PUBLIC        EA
-  D:0008H         PUBLIC        lh_low
-  D:0009H         PUBLIC        ll_low
+  D:000AH         PUBLIC        lh_low
+  D:000BH         PUBLIC        ll_low
   B:0020H.0       PUBLIC        edge
-  C:0A9EH         PUBLIC        main
+  C:0D43H         PUBLIC        main
+  D:000CH         PUBLIC        all_delay
   B:00A0H.0       PUBLIC        output
   D:0089H         PUBLIC        TMOD
-  D:000AH         PUBLIC        duty
+  D:000EH         PUBLIC        input_high
+  D:000FH         PUBLIC        duty
   B:00A8H.1       PUBLIC        ET0
+  B:00A0H.6       PUBLIC        err
   D:008CH         PUBLIC        TH0
   D:008AH         PUBLIC        TL0
+  C:0B9FH         PUBLIC        get_input
   B:0088H.4       PUBLIC        TR0
-  D:000EH         PUBLIC        lh_high
-  D:000FH         PUBLIC        ll_high
-  C:0C37H         PUBLIC        Interupt
+  D:0013H         PUBLIC        lh_high
+  D:0014H         PUBLIC        ll_high
+  C:0DC5H         PUBLIC        Interupt
+  D:0015H         PUBLIC        temp_duty
+  D:0019H         PUBLIC        input_low
+  D:001AH         PUBLIC        i
+  D:001BH         PUBLIC        j
+  B:00A0H.7       PUBLIC        on_off_switch
   -------         PROC          INTERUPT
-  C:0C37H         LINE#         26
-  C:0C37H         LINE#         28
-  C:0C39H         LINE#         29
-  C:0C3CH         LINE#         30
-  C:0C3CH         LINE#         31
-  C:0C3FH         LINE#         32
-  C:0C42H         LINE#         33
-  C:0C44H         LINE#         34
-  C:0C45H         LINE#         35
-  C:0C45H         LINE#         36
-  C:0C47H         LINE#         37
-  C:0C4AH         LINE#         38
-  C:0C4DH         LINE#         39
-  C:0C4DH         LINE#         42
+  C:0DC5H         LINE#         26
+  C:0DC5H         LINE#         28
+  C:0DC7H         LINE#         29
+  C:0DCAH         LINE#         30
+  C:0DCAH         LINE#         31
+  C:0DCDH         LINE#         32
+  C:0DD0H         LINE#         33
+  C:0DD2H         LINE#         34
+  C:0DD3H         LINE#         35
+  C:0DD3H         LINE#         36
+  C:0DD5H         LINE#         37
+  C:0DD8H         LINE#         38
+  C:0DDBH         LINE#         39
+BL51 BANKED LINKER/LOCATER V6.22                                                      04/25/2017  07:38:51  PAGE 3
+
+
+  C:0DDBH         LINE#         42
   -------         ENDPROC       INTERUPT
+  -------         PROC          GET_INPUT
+  C:0B9FH         LINE#         47
+  C:0B9FH         LINE#         48
+  C:0B9FH         LINE#         49
+  C:0BA5H         LINE#         50
+  C:0BACH         LINE#         52
+  C:0BBDH         LINE#         53
+  C:0BBDH         LINE#         54
+  C:0BBFH         LINE#         55
+  C:0BC2H         LINE#         56
+  C:0BC2H         LINE#         57
+  C:0BC7H         LINE#         59
+  C:0BC9H         LINE#         60
+  C:0BCBH         LINE#         61
+  C:0BCBH         LINE#         62
+  C:0BEBH         LINE#         63
+  C:0BF5H         LINE#         64
+  C:0C07H         LINE#         65
+  C:0C11H         LINE#         67
+  C:0C18H         LINE#         69
+  C:0C3EH         LINE#         70
+  C:0C50H         LINE#         72
+  C:0C71H         LINE#         73
+  C:0C78H         LINE#         74
+  C:0C7CH         LINE#         76
+  C:0CA7H         LINE#         77
+  C:0CABH         LINE#         78
+  C:0CAFH         LINE#         81
+  C:0CB2H         LINE#         82
+  C:0CB4H         LINE#         83
+  C:0CB6H         LINE#         85
+  -------         ENDPROC       GET_INPUT
   -------         PROC          MAIN
-  C:0A9EH         LINE#         44
-  C:0A9EH         LINE#         45
-  C:0A9EH         LINE#         48
-  C:0AA0H         LINE#         49
-  C:0AA3H         LINE#         53
-  C:0ACFH         LINE#         54
-  C:0AFBH         LINE#         56
-  C:0B24H         LINE#         57
-  C:0B4DH         LINE#         59
-  C:0B79H         LINE#         60
-  C:0BA5H         LINE#         63
-  C:0BA7H         LINE#         64
-  C:0BA9H         LINE#         66
-  C:0BA9H         LINE#         67
-  C:0BA9H         LINE#         69
+  C:0D43H         LINE#         91
+  C:0D43H         LINE#         92
+  C:0D43H         LINE#         96
+  C:0D45H         LINE#         98
+  C:0D48H         LINE#         100
+  C:0D69H         LINE#         101
+  C:0D70H         LINE#         102
+  C:0D74H         LINE#         104
+  C:0D9FH         LINE#         105
+  C:0DA3H         LINE#         106
+  C:0DA7H         LINE#         108
+  C:0DAAH         LINE#         109
+  C:0DACH         LINE#         110
+  C:0DAEH         LINE#         111
+  C:0DB1H         LINE#         112
+  C:0DB3H         LINE#         113
+  C:0DB5H         LINE#         114
+  C:0DB7H         LINE#         115
+  C:0DB7H         LINE#         116
+  C:0DB7H         LINE#         119
+  C:0DBAH         LINE#         120
+  C:0DBAH         LINE#         121
+BL51 BANKED LINKER/LOCATER V6.22                                                      04/25/2017  07:38:51  PAGE 4
+
+
+  C:0DBCH         LINE#         122
+  C:0DBEH         LINE#         123
+  C:0DC0H         LINE#         124
+  C:0DC3H         LINE#         126
   -------         ENDPROC       MAIN
-BL51 BANKED LINKER/LOCATER V6.22                                                      04/21/2017  14:30:56  PAGE 3
-
-
   -------         ENDMOD        MAIN_F
 
   -------         MODULE        ?C?FPADD
@@ -133,21 +198,35 @@ SYMBOL TABLE OF MODULE:  .\Objects\signal_freq (MAIN_F)
   C:08F8H         PUBLIC        ?C?FPMUL
   -------         ENDMOD        ?C?FPMUL
 
-  -------         MODULE        ?C?FPNEG
-  C:09FEH         PUBLIC        ?C?FPNEG
-  -------         ENDMOD        ?C?FPNEG
+  -------         MODULE        ?C?FPDIV
+  C:0A01H         PUBLIC        ?C?FPDIV
+  -------         ENDMOD        ?C?FPDIV
+
+  -------         MODULE        ?C?FCAST
+  C:0AA8H         PUBLIC        ?C?FCASTC
+  C:0AA3H         PUBLIC        ?C?FCASTI
+  C:0A9EH         PUBLIC        ?C?FCASTL
+  -------         ENDMOD        ?C?FCAST
 
   -------         MODULE        ?C?CASTF
-  C:0A0FH         PUBLIC        ?C?CASTF
+  C:0ADCH         PUBLIC        ?C?CASTF
   -------         ENDMOD        ?C?CASTF
 
+  -------         MODULE        ?C?SCDIV
+  C:0B5DH         PUBLIC        ?C?SCDIV
+  -------         ENDMOD        ?C?SCDIV
+
+  -------         MODULE        ?C?IMUL
+  C:0B7FH         PUBLIC        ?C?IMUL
+  -------         ENDMOD        ?C?IMUL
+
   -------         MODULE        ?C?LNEG
-  C:0A90H         PUBLIC        ?C?LNEG
+  C:0B91H         PUBLIC        ?C?LNEG
   -------         ENDMOD        ?C?LNEG
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 012FH BYTE (14%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 01C2H BYTE (21%) *
 ******************************************************************************
 
-Program Size: data=17.1 xdata=0 code=1117
+Program Size: data=29.1 xdata=0 code=1521
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

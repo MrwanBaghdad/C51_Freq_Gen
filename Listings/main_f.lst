@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   MAIN_F                                                            04/21/2017 14:30:56 PAGE 1   
+C51 COMPILER V9.56.0.0   MAIN_F                                                            04/25/2017 07:38:51 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN_F
@@ -9,15 +9,15 @@ COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main_f.c OPTIMIZE(8,SPEED) BROWS
 line level    source
 
    1          /*
-   2          500 HZ signal generator with a variable duty cycle
-   3          based on the user's input on port 2 as a packed BCD
-   4          an error is raised in case of wrong duty cycle
-   5          Timer 0 is used to genrate signal
+   2             500 HZ signal generator with a variable duty cycle
+   3             based on the user's input on port 2 as a packed BCD
+   4             an error is raised in case of wrong duty cycle
+   5             Timer 0 is used to genrate signal
    6          
-   7          Written by:
-   8            Marwan Nabil 2767
-   9            Mohammed Nasser 2858
-  10          */
+   7             Written by:
+   8             Marwan Nabil 2767
+   9             Mohammed Nasser 2858
+  10           */
   11          
   12          #include <at89c51xd2.h>
   13          #include <stdlib.h>
@@ -48,46 +48,106 @@ line level    source
   38   2          TL0 = ll_low;
   39   2        }
   40   1        //edge= ~edge;
-  41   1        
+  41   1      
   42   1      }
-  43          
-  44          void main()
-  45          { 
-  46   1        
-  47   1        // gen a square wave with 50% duty cycle 
-  48   1        EA = 1;
-  49   1        TMOD = 0x01;
-  50   1        
+  43          char input_high, input_low, temp_h, temp_l;
+  44          float temp_duty=0;
+  45          char i,j;
+  46          short int all_delay;
+  47          char get_input()
+  48          { 
+  49   1        input_low = P1 & 0x0f;
+  50   1        input_high = (P1 >> 4) & 0x0f ;
   51   1        
-  52   1        
-  53   1        TH0 = 0xFF - 0x0e * (1-duty);
-  54   1        TL0 = 0xFF - 0x66 * (1-duty);
-C51 COMPILER V9.56.0.0   MAIN_F                                                            04/21/2017 14:30:56 PAGE 2   
+  52   1        if(input_low > 9 || input_high > 9)
+  53   1        {
+  54   2          err = 0;
+C51 COMPILER V9.56.0.0   MAIN_F                                                            04/25/2017 07:38:51 PAGE 2   
 
-  55   1        
-  56   1        lh_high= 0xFF - (0x0e * (duty));
-  57   1        ll_high= 0xFF - (0x66 * (duty)) + 1;
-  58   1        
-  59   1        lh_low = 0xFF - (0x0e * (1-duty));
-  60   1        ll_low = 0xFF - (0x66 * (1-duty)) + 1;
-  61   1        
-  62   1        
-  63   1        TR0 = 1;
-  64   1        ET0 =1 ;
-  65   1        
-  66   1        while(1)
-  67   1        {
-  68   2          
-  69   2        }
-  70   1      }
+  55   2          return -1;
+  56   2        }
+  57   1        temp_h= temp_l =0;
+  58   1        // convert to decimal
+  59   1        err = 1;
+  60   1        for(i = 0 ; i <=3 ; i++)
+  61   1        {
+  62   2          temp_h += input_high % 10 * (1 << i);
+  63   2          input_high /= 10;
+  64   2          temp_l += input_low %10 *  (1 << i);
+  65   2          input_low /=10;
+  66   2      
+  67   2        }
+  68   1        
+  69   1        temp_duty = temp_h * 10 + temp_l;
+  70   1        duty = temp_duty /100 ;
+  71   1        
+  72   1        all_delay =  0xffff - (int)(0x0e66 * duty);
+  73   1        lh_high = all_delay >> 8 & 0xff;
+  74   1        ll_high = all_delay & 0xff;
+  75   1        
+  76   1        all_delay =  0xffff - (int)(0x0e66 *(1-duty) );
+  77   1        lh_low = all_delay >> 8 & 0xff;
+  78   1        ll_low= all_delay & 0xff;
+  79   1        
+  80   1      
+  81   1        if(!TR0)
+  82   1          TR0 = 1;
+  83   1        return 0;
+  84   1      
+  85   1      }
+  86          
+  87          
+  88          sbit on_off_switch = P2^7;
+  89          
+  90          
+  91          void main()
+  92          { 
+  93   1      
+  94   1        // gen a square wave with 50% duty cycle 
+  95   1        //enable interripts
+  96   1        EA = 1;
+  97   1        //enable timer 0
+  98   1        TMOD = 0x01;
+  99   1      
+ 100   1        all_delay =  0xffff - (int)(0x0e65 * duty);
+ 101   1        lh_high = all_delay >> 8 & 0xff;
+ 102   1        ll_high = all_delay & 0xff;
+ 103   1        
+ 104   1        all_delay =  0xffff - (int)(0x0e65 *(1-duty) );
+ 105   1        lh_low = all_delay >> 8 & 0xff;
+ 106   1        ll_low= all_delay & 0xff;
+ 107   1      
+ 108   1        P1=1 ;
+ 109   1        ET0 =1 ;
+ 110   1        TR0 = 1;
+ 111   1        P1 = 0x50;
+ 112   1        on_off_switch = 1;
+ 113   1        edge = 0 ;
+ 114   1        output = 1;
+ 115   1        while(1)
+ 116   1        {
+C51 COMPILER V9.56.0.0   MAIN_F                                                            04/25/2017 07:38:51 PAGE 3   
+
+ 117   2          //polling delay
+ 118   2          //Getting duty input
+ 119   2          while(on_off_switch == 0)
+ 120   2          {
+ 121   3            TR0 = 0;
+ 122   3            output  = 1;
+ 123   3          }
+ 124   2          get_input();
+ 125   2          
+ 126   2        }
+ 127   1      }
+ 128          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    292    ----
+   CODE SIZE        =    433    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      8    ----
+   DATA SIZE        =     20    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1    ----
 END OF MODULE INFORMATION.

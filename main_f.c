@@ -43,6 +43,7 @@ void Interupt(void) interrupt 1
 char input_high, input_low, temp_h, temp_l;
 float temp_duty=0;
 char i,j;
+short int all_delay;
 char get_input()
 {	
 	input_low = P1 & 0x0f;
@@ -55,10 +56,11 @@ char get_input()
 	}
 	temp_h= temp_l =0;
 	// convert to decimal
+	err = 1;
 	for(i = 0 ; i <=3 ; i++)
 	{
 		temp_h += input_high % 10 * (1 << i);
-		input_high /= 10;+
+		input_high /= 10;
 		temp_l += input_low %10 *  (1 << i);
 		input_low /=10;
 
@@ -67,43 +69,60 @@ char get_input()
 	temp_duty = temp_h * 10 + temp_l;
 	duty = temp_duty /100 ;
 	
-	lh_high= 0xFF - (0x0e * (duty));
-	ll_high= 0xFF - (0x66 * (duty)) + 1;
+	all_delay =  0xffff - (int)(0x0e66 * duty);
+	lh_high = all_delay >> 8 & 0xff;
+	ll_high = all_delay & 0xff;
 	
-	lh_low = 0xFF - (0x0e * (1-duty));
-	ll_low = 0xFF - (0x66 * (1-duty)) + 1;
+	all_delay =  0xffff - (int)(0x0e66 *(1-duty) );
+	lh_low = all_delay >> 8 & 0xff;
+	ll_low= all_delay & 0xff;
+	
+
+	if(!TR0)
+		TR0 = 1;
 	return 0;
 
 }
+
+
+sbit on_off_switch = P2^7;
 
 
 void main()
 {	
 
 	// gen a square wave with 50% duty cycle 
+	//enable interripts
 	EA = 1;
+	//enable timer 0
 	TMOD = 0x01;
 
-	TH0 = 0xFF - 0x0e * (1-duty);
-	TL0 = 0xFF - 0x66 * (1-duty);
+	all_delay =  0xffff - (int)(0x0e65 * duty);
+	lh_high = all_delay >> 8 & 0xff;
+	ll_high = all_delay & 0xff;
+	
+	all_delay =  0xffff - (int)(0x0e65 *(1-duty) );
+	lh_low = all_delay >> 8 & 0xff;
+	ll_low= all_delay & 0xff;
 
-	lh_high= 0xFF - (0x0e * (duty));
-	ll_high= 0xFF - (0x66 * (duty)) + 1;
-
-	lh_low = 0xFF - (0x0e * (1-duty));
-	ll_low = 0xFF - (0x66 * (1-duty)) + 1;
 	P1=1 ;
-	TR0 = 1;
 	ET0 =1 ;
-	P1 = 50;
+	TR0 = 1;
+	P1 = 0x50;
+	on_off_switch = 1;
+	edge = 0 ;
+	output = 1;
 	while(1)
 	{
 		//polling delay
-		for(j = 0xffff; j>=0;j--);
-		for(j = 0xffff; j>=0;j--);
-		for(j = 0xffff; j>=0;j--);
 		//Getting duty input
+		while(on_off_switch == 0)
+		{
+			TR0 = 0;
+			output  = 1;
+		}
 		get_input();
-
+		
 	}
 }
+
