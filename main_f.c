@@ -25,17 +25,19 @@ char lh_high, ll_high, lh_low, ll_low;
 
 void Interupt(void) interrupt 1
 {
-	output = ~ output;
+	
 	if(edge)
 	{
 		TH0 = lh_high;
 		TL0 = ll_high;
 		edge = !edge;
+		output = 1;
 	}
 	else{
 		edge = !edge;
 		TH0 = lh_low;
 		TL0 = ll_low;
+		output = 0;
 	}
 	//edge= ~edge;
 
@@ -119,7 +121,7 @@ void main()
 		while(on_off_switch == 0)
 		{
 			TR0 = 0;
-			output  = 1;
+			output  = 0;
 		}
 		get_input();
 		
